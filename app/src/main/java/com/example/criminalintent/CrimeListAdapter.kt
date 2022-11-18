@@ -1,9 +1,12 @@
 package com.example.criminalintent
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.criminalintent.databinding.ListItemCrimeBinding
+import java.text.DateFormat
+import java.text.DateFormat.getDateTimeInstance
 
 class CrimeListAdapter(
     private val crimes: List<Crime>
@@ -26,8 +29,14 @@ class CrimeListAdapter(
 class CrimeHolder(
     private val binding: ListItemCrimeBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind (crime: Crime) {
+    fun bind(crime: Crime) {
         binding.crimeTitle.text = crime.title
-        binding.crimeDate.text = crime.date.toString()
+        binding.crimeDate.text = getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT)
+            .format(crime.date).toString()
+        binding.crimeSolved.visibility = if (crime.isSolved) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
     }
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import com.example.criminalintent.databinding.FragmentCrimeDetailBinding
+import java.text.DateFormat
 import java.util.*
 
 class CrimeDetailFragment : Fragment() {
@@ -46,7 +47,8 @@ class CrimeDetailFragment : Fragment() {
             }
 
             crimeDate.apply {
-                text = crime.date.toString()
+                text = DateFormat.getDateInstance(DateFormat.FULL)
+                    .format(crime.date).toString()
                 isEnabled = false
             }
 

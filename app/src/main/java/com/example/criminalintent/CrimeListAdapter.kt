@@ -3,10 +3,11 @@ package com.example.criminalintent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.criminalintent.databinding.ListItemCrimeBinding
-import java.text.DateFormat
-import java.text.DateFormat.getDateTimeInstance
+import org.joda.time.DateTime
+import org.joda.time.LocalDate
 
 class CrimeListAdapter(
     private val crimes: List<Crime>
@@ -29,10 +30,10 @@ class CrimeListAdapter(
 class CrimeHolder(
     private val binding: ListItemCrimeBinding
 ) : RecyclerView.ViewHolder(binding.root) {
+
     fun bind(crime: Crime) {
         binding.crimeTitle.text = crime.title
-        binding.crimeDate.text = getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT)
-            .format(crime.date).toString()
+        binding.crimeDate.text = LocalDate().toString()
         binding.crimeSolved.visibility = if (crime.isSolved) {
             View.VISIBLE
         } else {
@@ -40,3 +41,4 @@ class CrimeHolder(
         }
     }
 }
+//getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT).format(crime.date).toString()

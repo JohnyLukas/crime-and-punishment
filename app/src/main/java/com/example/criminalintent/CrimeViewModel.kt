@@ -1,21 +1,23 @@
 package com.example.criminalintent
 
 import androidx.lifecycle.ViewModel
-import org.joda.time.DateTime
-import java.util.*
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class CrimeViewModel : ViewModel() {
-    val crimes = mutableListOf<Crime>()
+    private val crimeRepository = CrimeRepository.get()
+    private val _crimes: MutableStateFlow<List<Crime>> = MutableStateFlow(emptyList())
+    val crimes: StateFlow<List<Crime>>
+        get() = _crimes.asStateFlow()
 
     init {
-        for (i in 0 until 100) {
-            val crime = Crime(
-                id = UUID.randomUUID(),
-                title ="Crime #$i",
-                date = Date(),
-                isSolved = i % 2 == 0
-            )
-            crimes += crime
+        viewModelScope.launch {
+            crimeRepository.getCrimes().collect {
+                _crimes.value = it
+            }
         }
     }
 }

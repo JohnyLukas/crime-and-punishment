@@ -3,6 +3,7 @@ package com.example.criminalintent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.criminalintent.databinding.ListItemCrimeBinding
@@ -34,11 +35,6 @@ class CrimeHolder(
     fun bind(crime: Crime) {
         binding.crimeTitle.text = crime.title
         binding.crimeDate.text = LocalDate().toString()
-        binding.crimeSolved.visibility = if (crime.isSolved) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
+        binding.crimeSolved.isVisible = crime.isSolved
     }
 }
-//getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT).format(crime.date).toString()

@@ -4,14 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class CrimeViewModel : ViewModel() {
     private val crimeRepository = CrimeRepository.get()
     private val _crimes: MutableStateFlow<List<Crime>> = MutableStateFlow(emptyList())
-    val crimes: StateFlow<List<Crime>>
-        get() = _crimes.asStateFlow()
+    val crimes: StateFlow<List<Crime>> = _crimes
 
     init {
         viewModelScope.launch {

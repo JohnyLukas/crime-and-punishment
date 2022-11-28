@@ -1,17 +1,16 @@
 package com.example.criminalintent
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.criminalintent.databinding.ListItemCrimeBinding
-import org.joda.time.DateTime
 import org.joda.time.LocalDate
+import java.util.UUID
 
 class CrimeListAdapter(
-    private val crimes: List<Crime>
+    private val crimes: List<Crime>,
+    private val onCrimeClicked: (crimeId: UUID) -> Unit
 ) : RecyclerView.Adapter<CrimeHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
@@ -22,7 +21,7 @@ class CrimeListAdapter(
 
     override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
         val crime = crimes[position]
-        holder.bind(crime)
+        holder.bind(crime, onCrimeClicked)
     }
 
     override fun getItemCount() = crimes.size
@@ -32,9 +31,12 @@ class CrimeHolder(
     private val binding: ListItemCrimeBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(crime: Crime) {
+    fun bind(crime: Crime, onCrimeClicked: (crimeId: UUID) -> Unit) {
         binding.crimeTitle.text = crime.title
         binding.crimeDate.text = LocalDate().toString()
+        binding.root.setOnClickListener {
+            onCrimeClicked(crime.id)
+        }
         binding.crimeSolved.isVisible = crime.isSolved
     }
 }

@@ -1,9 +1,8 @@
 package com.example.criminalintent
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -11,32 +10,20 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.criminalintent.databinding.FragmentCrimeDetailBinding
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 
-class CrimeDetailFragment : Fragment() {
+class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
     private val args: CrimeDetailFragmentArgs by navArgs()
 
     private val crimeDetailViewModel: CrimeDetailViewModel by viewModels {
         CrimeDetailViewModelFactory(args.crimeId)
     }
 
-    private var _binding: FragmentCrimeDetailBinding? = null
-
-    private val binding
-        get() = checkNotNull(_binding) {
-            "Cannot access binding because it is null. Is the view visible?"
-        }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentCrimeDetailBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    private val binding: FragmentCrimeDetailBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,11 +53,22 @@ class CrimeDetailFragment : Fragment() {
                 }
             }
         }
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (binding.crimeTitle.text.isBlank()) {
+                        Snackbar.make(
+                            binding.root,
+                            R.string.blank_title,
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
+                    isEnabled = false
+                }
+            }
+            )
     }
 
     private fun updateUi(crime: Crime) {

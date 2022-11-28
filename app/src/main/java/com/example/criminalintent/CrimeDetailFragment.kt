@@ -56,25 +56,23 @@ class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
         setFragmentResultListener(
             DatePickerFragment.REQUEST_KEY_DATE
         ) { _, bundle ->
-            val newDate = bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
+            val newDate =
+                bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
             crimeDetailViewModel.updateCrime { it.copy(date = newDate) }
         }
 
-        requireActivity()
-            .onBackPressedDispatcher
-            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (binding.crimeTitle.text.isBlank()) {
-                        Snackbar.make(
-                            binding.root,
-                            R.string.blank_title,
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+        requireActivity().onBackPressedDispatcher.addCallback(
+                viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        if (binding.crimeTitle.text.isBlank()) {
+                            Snackbar.make(
+                                binding.root, R.string.blank_title, Snackbar.LENGTH_SHORT
+                            ).show()
+                        }
+                        isEnabled = false
                     }
-                    isEnabled = false
-                }
-            }
-            )
+                })
     }
 
     private fun updateUi(crime: Crime) {
@@ -83,8 +81,8 @@ class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
                 crimeTitle.setText(crime.title)
             }
 
-            crimeDate.text = DateFormat.getDateInstance(DateFormat.FULL)
-                .format(crime.date).toString()
+            crimeDate.text =
+                DateFormat.getDateInstance(DateFormat.FULL).format(crime.date).toString()
             crimeDate.setOnClickListener {
                 findNavController().navigate(
                     CrimeDetailFragmentDirections.selectDate(crime.date)

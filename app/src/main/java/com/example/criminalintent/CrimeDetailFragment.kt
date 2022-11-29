@@ -38,7 +38,7 @@ class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
                 }
             }
 
-            crimeSolved.setOnCheckedChangeListener { _, isChecked ->
+            isCrimeSolved.setOnCheckedChangeListener { _, isChecked ->
                 crimeDetailViewModel.updateCrime { oldCrime ->
                     oldCrime.copy(isSolved = isChecked)
                 }
@@ -89,7 +89,7 @@ class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
                 )
             }
 
-            crimeSolved.isChecked = crime.isSolved
+            isCrimeSolved.isChecked = crime.isSolved
         }
     }
 }

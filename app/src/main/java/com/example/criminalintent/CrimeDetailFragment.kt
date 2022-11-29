@@ -1,6 +1,9 @@
 package com.example.criminalintent
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doOnTextChanged
@@ -17,7 +20,7 @@ import com.example.criminalintent.databinding.FragmentCrimeDetailBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.text.DateFormat
-import java.util.Date
+import java.util.*
 
 class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
     private val args: CrimeDetailFragmentArgs by navArgs()
@@ -27,6 +30,11 @@ class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
     }
 
     private val binding: FragmentCrimeDetailBinding by viewBinding()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,23 +64,21 @@ class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
         setFragmentResultListener(
             DatePickerFragment.REQUEST_KEY_DATE
         ) { _, bundle ->
-            val newDate =
-                bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
+            val newDate = bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
             crimeDetailViewModel.updateCrime { it.copy(date = newDate) }
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(
-                viewLifecycleOwner,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        if (binding.crimeTitle.text.isBlank()) {
-                            Snackbar.make(
-                                binding.root, R.string.blank_title, Snackbar.LENGTH_SHORT
-                            ).show()
-                        }
-                        isEnabled = false
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (binding.crimeTitle.text.isBlank()) {
+                        Snackbar.make(
+                            binding.root, R.string.blank_title, Snackbar.LENGTH_SHORT
+                        ).show()
                     }
-                })
+                    isEnabled = false
+                }
+            })
     }
 
     private fun updateUi(crime: Crime) {
@@ -90,6 +96,22 @@ class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
             }
 
             isCrimeSolved.isChecked = crime.isSolved
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_crime_detail, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.delCrime -> {
+                viewLifecycleOwner.lifecycleScope.launch {crimeDetailViewModel.deleteCrime()}
+                findNavController().navigate(CrimeDetailFragmentDirections.showCrimeList())
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

@@ -14,6 +14,7 @@ class CrimeDetailViewModel(crimeId: UUID) : ViewModel() {
     private val crimeRepository = CrimeRepository.get()
 
     private val _crime: MutableStateFlow<Crime?> = MutableStateFlow(null)
+
     val crime: StateFlow<Crime?> = _crime.asStateFlow()
 
     init {
@@ -26,6 +27,10 @@ class CrimeDetailViewModel(crimeId: UUID) : ViewModel() {
         _crime.update { oldCrime ->
             oldCrime?.let { onUpdate(it) }
         }
+    }
+
+    suspend fun deleteCrime() {
+         _crime.value?.let { crimeRepository.deleteCrime(it) }
     }
 
     override fun onCleared() {

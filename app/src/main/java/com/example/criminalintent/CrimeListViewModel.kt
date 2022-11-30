@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class CrimeViewModel : ViewModel() {
+class CrimeListViewModel : ViewModel() {
     private val crimeRepository = CrimeRepository.get()
     private val _crimes: MutableStateFlow<List<Crime>> = MutableStateFlow(emptyList())
     val crimes: StateFlow<List<Crime>> = _crimes
@@ -17,5 +17,9 @@ class CrimeViewModel : ViewModel() {
                 _crimes.value = it
             }
         }
+    }
+
+    suspend fun addCrime(crime: Crime) {
+        crimeRepository.addCrime(crime)
     }
 }

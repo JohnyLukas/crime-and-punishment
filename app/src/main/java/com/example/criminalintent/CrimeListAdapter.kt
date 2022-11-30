@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.criminalintent.databinding.ListItemCrimeBinding
-import org.joda.time.LocalDate
-import java.util.UUID
+import java.text.DateFormat
+import java.util.*
 
 class CrimeListAdapter(
     private val crimes: List<Crime>,
@@ -32,8 +32,12 @@ class CrimeHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(crime: Crime, onCrimeClicked: (crimeId: UUID) -> Unit) {
+
         binding.crimeTitle.text = crime.title
-        binding.crimeDate.text = LocalDate().toString()
+
+        binding.crimeDate.text =
+            DateFormat.getDateInstance(DateFormat.FULL).format(crime.date).toString()
+
         binding.root.setOnClickListener {
             onCrimeClicked(crime.id)
         }

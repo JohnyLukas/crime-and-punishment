@@ -111,6 +111,13 @@ class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
                 takePhoto.launch(photoUri)
             }
 
+            crimePhoto.setOnClickListener {
+                val photoFile = photoName?.let {
+                    File(requireContext().applicationContext.filesDir, it)
+                }
+                PhotoPickerFragment(photoFile).show(parentFragmentManager, "PhotoPickerFragment")
+            }
+
             /*val captureImageIntent = takePhoto.contract.createIntent(
                 requireContext(),
                 null
@@ -186,10 +193,6 @@ class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
             }
 
             updatePhoto(crime.photoFileName)
-
-            crimePhoto.setOnClickListener{
-
-            }
         }
     }
 

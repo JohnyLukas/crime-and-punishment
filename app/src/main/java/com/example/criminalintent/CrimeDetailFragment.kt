@@ -115,6 +115,7 @@ class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
                 val photoFile = photoName?.let {
                     File(requireContext().applicationContext.filesDir, it)
                 }
+
                 PhotoPickerFragment(photoFile).show(parentFragmentManager, "PhotoPickerFragment")
             }
 

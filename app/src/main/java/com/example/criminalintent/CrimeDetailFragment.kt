@@ -114,9 +114,10 @@ class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
             crimePhoto.setOnClickListener {
                 val photoFile = photoName?.let {
                     File(requireContext().applicationContext.filesDir, it)
-                }
+                } ?: crimeDetailViewModel.crime.value?.photoFileName?.let { it1 ->
+                    File(requireContext().applicationContext.filesDir, it1) }
 
-                PhotoPickerFragment(photoFile).show(parentFragmentManager, "PhotoPickerFragment")
+                PhotoPickerFragment(photoFile).show(parentFragmentManager, PhotoPickerFragment.TAG)
             }
 
             /*val captureImageIntent = takePhoto.contract.createIntent(

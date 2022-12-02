@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">CriminalIntent</string>
     <string name="crime_title_hint">Enter a title for the crime.</string>
     <string name="crime_title_label">Title</string>
@@ -7,7 +8,6 @@
     <string name="blank_title">Please fill in the title</string>
     <string name="new_crime">New Crime</string>
     <string name="delete_crime">Delete Crime</string>
-    <string name="no_crimes">There are no crimes</string>
     <string name="crime_suspect_text">Choose Suspect</string>
     <string name="crime_report_text">Send Crime Report</string>
     <string name="crime_report">%1$s! The crime was discovered on %2$s. %3$s, and %4$s</string>
@@ -17,5 +17,5 @@
     <string name="crime_report_suspect">the suspect is %s.</string>
     <string name="crime_report_subject">CriminalIntent Crime Report</string>
     <string name="send_report">Send crime report via</string>
-    <string name="add_photo">Add Photo</string>
+
 </resources>

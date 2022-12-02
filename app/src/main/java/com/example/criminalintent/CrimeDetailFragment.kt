@@ -32,6 +32,8 @@ import java.io.File
 import java.text.DateFormat
 import java.util.*
 
+private const val KEY_IMAGE = "KEY_IMAGE"
+
 class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
     private val binding: FragmentCrimeDetailBinding by viewBinding()
 
@@ -115,14 +117,14 @@ class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
             crimePhoto.setOnClickListener {
                 val photoFile = photoName?.let {
                     File(requireContext().applicationContext.filesDir, it)
-                } ?: crimeDetailViewModel.crime.value?.photoFileName?.let { it1 ->
-                    File(requireContext().applicationContext.filesDir, it1)
+                } ?: crimeDetailViewModel.crime.value?.photoFileName?.let { filePath ->
+                    File(requireContext().applicationContext.filesDir, filePath)
                 }
 
                 photoFile?.toUri()?.let {
                     PhotoPickerFragment().apply {
                         arguments = Bundle().apply {
-                            putString("KEY_IMAGE", photoFile.toUri().toString())
+                            putString(KEY_IMAGE, photoFile.toUri().toString())
                         }
                         show(this@CrimeDetailFragment.parentFragmentManager, PhotoPickerFragment.TAG)
                     }

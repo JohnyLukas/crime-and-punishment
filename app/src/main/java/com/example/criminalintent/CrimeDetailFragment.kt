@@ -13,6 +13,7 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -30,6 +31,8 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.text.DateFormat
 import java.util.*
+
+private const val KEY_IMAGE = "KEY_IMAGE"
 
 class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
     private val binding: FragmentCrimeDetailBinding by viewBinding()
@@ -114,10 +117,18 @@ class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
             crimePhoto.setOnClickListener {
                 val photoFile = photoName?.let {
                     File(requireContext().applicationContext.filesDir, it)
-                } ?: crimeDetailViewModel.crime.value?.photoFileName?.let { it1 ->
-                    File(requireContext().applicationContext.filesDir, it1) }
+                } ?: crimeDetailViewModel.crime.value?.photoFileName?.let { filePath ->
+                    File(requireContext().applicationContext.filesDir, filePath)
+                }
 
-                PhotoPickerFragment(photoFile).show(parentFragmentManager, PhotoPickerFragment.TAG)
+                photoFile?.toUri()?.let {
+                    PhotoPickerFragment().apply {
+                        arguments = Bundle().apply {
+                            putString(KEY_IMAGE, photoFile.toUri().toString())
+                        }
+                        show(this@CrimeDetailFragment.parentFragmentManager, PhotoPickerFragment.TAG)
+                    }
+                }
             }
 
             /*val captureImageIntent = takePhoto.contract.createIntent(
@@ -163,7 +174,7 @@ class CrimeDetailFragment : Fragment(R.layout.fragment_crime_detail) {
             }
 
             crimeDate.text =
-                DateFormat.getDateInstance(DateFormat.FULL).format(crime.date).toString()
+                DateFormat.getDateInstance(DateFormat.FULL, Locale.ROOT).format(crime.date).toString()
 
             crimeDate.setOnClickListener {
                 findNavController().navigate(

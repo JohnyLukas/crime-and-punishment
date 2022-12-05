@@ -18,5 +18,7 @@
     <string name="new_crime">Crimen Nuevo</string>
     <string name="blank_title">Por favor, rellene el título</string>
     <string name="delete_crime">Eliminar delito</string>
+    <string name="add_photo">Añadir foto</string>
+    <string name="crime_photo">Evidencia Fotográfica</string>
 
 </resources>
